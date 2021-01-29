@@ -15,21 +15,25 @@
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
 /**
- * This file replaces the legacy STATEMENTS section in db/install.xml,
+ * The mod_skype instance list viewed event.
  *
- * lib.php/modulename_install() post installation hook and partially defaults.php
- *
- * @package   mod_skype
- * @copyright 2011 Amr Hourani a.hourani@gmail.com <your@email.adress>
- * @copyright 2020 onwards AL Rachels (drachels@drachels.com)
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ * @package    mod_skype
+ * @copyright  2014 drachels@drachels.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
+
+namespace mod_skype\event;
+
+defined('MOODLE_INTERNAL') || die();
 
 /**
- * Post installation procedure
+ * The mod_skype instance list viewed event class.
+ *
+ * @package    mod_skype
+ * @since      Moodle 2.7
+ * @copyright  2014 AL Rachels, drachels@drachels.com
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
-function xmldb_skype_install() {
-
-    // Insert here code to perform some actions.
-
+class course_module_instance_list_viewed extends \core\event\course_module_instance_list_viewed {
+    // No need for any code here as everything is handled by the parent class.
 }

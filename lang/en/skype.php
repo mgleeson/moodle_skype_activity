@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -24,27 +23,40 @@
  *
  * @package   mod_skype
  * @copyright 2011 Amr Hourani a.hourani@gmail.com
+ * @copyright 2020 onwards AL Rachels (drachels@drachels.com)
  * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
 defined('MOODLE_INTERNAL') || die();
-
-$string['modulename'] = 'skype';
-$string['modulenameplural'] = 'skypes';
-$string['skypefieldset'] = 'Custom example fieldset';
-$string['skypename'] = 'skype name';
-$string['skypename_help'] = 'This is the content of the help tooltip associated with the skype field. Markdown syntax is supported.';
-$string['skype'] = 'skype';
-$string['pluginadministration'] = 'skype administration';
-$string['pluginname'] = 'skype';
-$string['timetoskype'] = 'Time to skype: {$a}';
-$string['type'] = 'Type';
-$string['skypeid'] = 'Skype ID';
-$string['photo'] = 'Photo';
+// Following lines added by AL Rachels. Sorted 9/9/19.
+$string['calendarend'] = '{$a} closes';
+$string['calendarchattime'] = '{$a} chat time';
+$string['calendarstart'] = '{$a} opens';
+$string['modulename'] = 'Skype';
+$string['modulenameplural'] = 'Skypes';
+$string['nobody'] = 'Nobody is enrolled for this Skype type';
 $string['noskypeid'] = 'No Skype ID';
+$string['notavailable'] = '<b>Not currently available!<br></b>';
 $string['options'] = 'Contact';
-$string['withselected'] = 'With Selected (through check boxes):';
+$string['photo'] = 'Photo';
+$string['pluginadministration'] = 'Skype administration';
+$string['pluginname'] = 'Skype';
+$string['returnto'] = 'Return to {$a}';
+$string['skype:addinstance'] = 'Can add instance';
+$string['skype:manageentries'] = 'Manage entries';
+$string['skype:view'] = 'Can view';
+$string['skype'] = 'Skype';
+$string['skypeclosed'] = 'This Skype closed on {$a}.';
+$string['skypeclosetime'] = 'Close time';
+$string['skypefieldset'] = 'Custom example fieldset';
+$string['skypeid'] = 'Skype ID';
+$string['skypename_help'] = 'This is the content of the help tooltip associated with the Skype field. Markdown syntax is supported.';
+$string['skypename'] = 'Skype name';
+$string['skypeopen'] = 'This Skype will be open on {$a}.';
+$string['skypeopentime'] = 'Open time';
+$string['timetoskype'] = 'Time to Skype: {$a}';
+$string['type'] = 'Type';
 $string['updateskypeid'] = 'Update your Skype ID from your profile page';
 $string['updateskypeidnote'] = 'In order to participate in skype activity, you need to update you Skype ID in the system. {$a}';
-$string['nobody'] = 'Nobody is enrolled for this skype type';
-?>
+$string['withselected'] = 'With Selected (through check boxes):';
+

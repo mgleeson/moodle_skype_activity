@@ -1,5 +1,4 @@
 <?php
-
 // This file is part of Moodle - http://moodle.org/
 //
 // Moodle is free software: you can redistribute it and/or modify
@@ -15,87 +14,115 @@
 // You should have received a copy of the GNU General Public License
 // along with Moodle.  If not, see <http://www.gnu.org/licenses/>.
 
-
 /**
- * This is a one-line short description of the file
+ * This page lists all the instances of skype in a particular course
  *
- * You can have a rather longer description of the file as well,
- * if you like, and it can span multiple lines.
- *
- * @package   mod_skype
- * @copyright 2011 Amr Hourani a.hourani@gmail.com
- * @license   http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- */
+ * @package mod_skype
+ * @copyright 1999 onwards Martin Dougiamas  {@link http://moodle.com}
+ * @copyright 2020 onwards AL Rachels (drachels@drachels.com)
+ * @license    http://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
+ **/
 
-/// Replace skype with the name of your module and remove this line
+require_once(__DIR__ . "/../../config.php");
+require_once("lib.php");
 
-require_once(dirname(dirname(dirname(__FILE__))).'/config.php');
-require_once(dirname(__FILE__).'/lib.php');
+$id = required_param('id', PARAM_INT);   // Course.
 
-$id = required_param('id', PARAM_INT);   // course
-
-if (! $course = $DB->get_record('course', array('id' => $id))) {
-    error('Course ID is incorrect');
+if (! $course = $DB->get_record("course", array("id" => $id))) {
+    print_error("Course ID is incorrect");
 }
 
 require_course_login($course);
 
-add_to_log($course->id, 'skype', 'view all', "index.php?id=$course->id", '');
-
-/// Print the header
-
-$PAGE->set_url('/mod/skype/view.php', array('id' => $id));
-$PAGE->set_title($course->fullname);
-$PAGE->set_heading($course->shortname);
+// Header.
+$strskypes = get_string("modulenameplural", "skype");
+$PAGE->set_pagelayout('incourse');
+$PAGE->set_url('/mod/skype/index.php', array('id' => $id));
+$PAGE->navbar->add($strskypes);
+$PAGE->set_title($strskypes);
+$PAGE->set_heading($course->fullname);
 
 echo $OUTPUT->header();
+echo $OUTPUT->heading($strskypes);
 
-/// Get all the appropriate data
-
-if (! $skypes = get_all_instances_in_course('skype', $course)) {
-    echo $OUTPUT->heading(get_string('noskypes', 'skype'), 2);
-    echo $OUTPUT->continue_button("view.php?id=$course->id");
-    echo $OUTPUT->footer();
-    die();
+if (! $skypes = get_all_instances_in_course("skype", $course)) {
+    notice(get_string('thereareno', 'moodle', get_string("modulenameplural", "skype")), "../../course/view.php?id=$course->id");
+    die;
 }
 
-/// Print the list of instances (your module will probably extend this)
-
-$timenow  = time();
-$strname  = get_string('name');
-$strweek  = get_string('week');
-$strtopic = get_string('topic');
-
-if ($course->format == 'weeks') {
-    $table->head  = array ($strweek, $strname);
-    $table->align = array ('center', 'left');
-} else if ($course->format == 'topics') {
-    $table->head  = array ($strtopic, $strname);
-    $table->align = array ('center', 'left', 'left', 'left');
-} else {
-    $table->head  = array ($strname);
-    $table->align = array ('left', 'left', 'left');
+// Sections.
+$usesections = course_format_uses_sections($course->format);
+if ($usesections) {
+    $modinfo = get_fast_modinfo($course);
+    $sections = $modinfo->get_section_info_all();
 }
 
+$timenow = time();
+
+// Table data.
+$table = new html_table();
+
+$table->head = array();
+$table->align = array();
+if ($usesections) {
+    $table->head[] = get_string('sectionname', 'format_'.$course->format);
+    $table->align[] = 'center';
+}
+
+$table->head[] = get_string('name');
+$table->align[] = 'left';
+$table->head[] = get_string('description');
+$table->align[] = 'left';
+
+$currentsection = '';
+$i = 0;
 foreach ($skypes as $skype) {
-    if (!$skype->visible) {
-        //Show dimmed if the mod is hidden
-        $link = '<a class="dimmed" href="view.php?id='.$skype->coursemodule.'">'.format_string($skype->name).'</a>';
-    } else {
-        //Show normal if the mod is visible
-        $link = '<a href="view.php?id='.$skype->coursemodule.'">'.format_string($skype->name).'</a>';
+
+    $context = context_module::instance($skype->coursemodule);
+    $entriesmanager = has_capability('mod/skype:manageentries', $context);
+
+    // Section.
+    $printsection = '';
+    if ($skype->section !== $currentsection) {
+        if ($skype->section) {
+            $printsection = get_section_name($course, $sections[$skype->section]);
+        }
+        if ($currentsection !== '') {
+            $table->data[$i] = 'hr';
+            $i++;
+        }
+        $currentsection = $skype->section;
+    }
+    if ($usesections) {
+        $table->data[$i][] = $printsection;
     }
 
-    if ($course->format == 'weeks' or $course->format == 'topics') {
-        $table->data[] = array ($skype->section, $link);
+    // Link.
+    if (!$skype->visible) {
+        // Show dimmed if the mod is hidden.
+        $table->data[$i][] = "<a class=\"dimmed\" href=\"view.php?id=$skype->coursemodule\">"
+            .format_string($skype->name, true)."</a>";
     } else {
-        $table->data[] = array ($link);
+        // Show normal if the mod is visible.
+        $table->data[$i][] = "<a href=\"view.php?id=$skype->coursemodule\">".format_string($skype->name, true)."</a>";
     }
+
+    // Description.
+    $table->data[$i][] = format_text($skype->intro,  $skype->introformat);
+
+    $i++;
 }
 
-echo $OUTPUT->heading(get_string('modulenameplural', 'skype'), 2);
-print_table($table);
+echo "<br />";
 
-/// Finish the page
+echo html_writer::table($table);
+
+// Trigger course module instance list event.
+$params = array(
+    'context' => context_course::instance($course->id)
+);
+$event = \mod_skype\event\course_module_instance_list_viewed::create($params);
+$event->add_record_snapshot('course', $course);
+$event->trigger();
 
 echo $OUTPUT->footer();

@@ -1,0 +1,62 @@
+Skype Moodle Plugin
+======================
+Features
+========
+This plugin provides a listing of Moodle users.
+Each user that has included a Skype ID in their
+profile will have buttons to Create Conference,
+Create Chat, Send Voicemail, Add Contact, and
+Send file, using the Skype application. 
+
+Installation
+============
+
+* Put this code under "yourmoodlerootdir/mod/skype" (you may "git clone").
+* Visit your Moodle site as administrator to install plugin via web interface.
+
+Contact
+=======
+
+Feel free to contact me at drachels@drachels.com
+
+If you have problems using the plugin or would like
+to see a new feature implemented, please visit
+
+    https://github.com/drachels/moodle-mod_skype/issues
+
+If you like the plugin and want to say hi publicly instead of
+sending an email, leave a comment at
+
+    https://moodle.org/plugins/mod_skype
+
+Moodle Versions
+===============
+20200506 I assumed maintenance responsibility for this plugin.
+=== 3.6.0 ===
+20200506 Started work on new Skype v3.6.0.
+20200506 Tracker, Skype_392, Ran codechecker and fixed variables with underscores in them.
+20200506 Tracker, Skype_393, Many lines of code longer than 132 characters. Fixed the 
+ones in php. Still working on the others.
+20200506 Tracker, Skype_394, Added a branch check to add deprecated
+update button ONLY in Moodles 3.1 and lower. Otherwise, skip adding it.
+20200514 Completed more code cleanup and documentation.
+20200514 Skype_395 Removed mod_form heading, Custom example fieldset, and
+moved the, Next chat time, setting so that is under the Availability heading.
+20200516 Skype_406 In locallib.php, removed unused line 96, $all_userskype = '';.
+20200516 Completed more code cleanup, mostly fixing line lengths.
+20200516 Skype_407 Started converting oops.html to oops.php and moving all
+the css style entries to a styles.css file.
+20200518 Skype_407 Got oops.php working with bg.png moved to the pix folder,
+but still need to verify that oops.php gets called into action.
+20200520 Push all recent changes to github, with bump to this version.
+=== 3.6.1 ===
+20210129 Fixed variable name capitalization error in backup_skype_activity_task.class.php file.
+
+
+=== Notes ===
+20200506 The version listed at Moodle, at the time I took over
+maintenance of the plugin, was v2.7 for Moodle 3.0, 3.1. I had
+made changes as needed, and had a 3.4.0, 3.5.0, and 3.5.0+.
+
+Prior to 20200506 I had added groups to Skype 3.5.0/3.5.0+.
+Prior to 20200506 I had added Calendar events to Skype 3.5.0/3.5.0+.
